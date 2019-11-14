@@ -17,14 +17,17 @@ const pool = mysql.createPool(config);
 // ];
 
 const CREATE_ORDER = 'insert into orders(order_date, email) values (?, ?)';
-const GET_LAST_INSERTED_ORDER_ID = 'select last_insert_id() as order_id from orders';
+const SELECT_LAST_INSERTED_ORDER_ID = 'select last_insert_id() as order_id from orders';
 const CREATE_ORDER_DETAILS = 'insert into line_item(order_id, description, quantity) values ?';
+const SELECT_ORDER_BY_ORDER_ID = 'select * from orders join line_item on orders.order_id = line_item.order_id where orders.order_id = ?';
 
 const createOrder = db.mkQuery(CREATE_ORDER);
-const getLastInsertedOrderId = db.mkQuery(GET_LAST_INSERTED_ORDER_ID);
+const getLastInsertedOrderId = db.mkQuery(SELECT_LAST_INSERTED_ORDER_ID);
 const createOrderDetails = db.mkQuery(CREATE_ORDER_DETAILS);
 
-router.post('/order', function (req, res, next) {
+const getOrderByOrderId = db.mkQueryFromPool(db.mkQuery(SELECT_ORDER_BY_ORDER_ID), pool);
+
+router.post('/order/create', function (req, res, next) {
   console.log(req.body);
   pool.getConnection((error, connection) => {
     if (error) {
@@ -48,16 +51,42 @@ router.post('/order', function (req, res, next) {
         return createOrderDetails({ connection: status.connection, params: [newOrderDetails] });
       })
       .then(db.commit)
-      .catch((error) => {
-        console.log(error);
-        return db.rollback;
-      })
+      .catch(db.rollback)
       .finally(() => {
-        console.info('all done');
         connection.release();
         res.json({ message: 'finally here' });
       })
   })
+});
+
+router.get('/order/:id', (req, res, next) => {
+  const id = req.params.id;
+  console.log(id);
+  getOrderByOrderId(id)
+    .then(result => {
+      const order = {
+        order_id: result[0].order_id,
+        order_date: result[0].order_date,
+        email: result[0].email,
+        orderDetails: []
+      };
+      order.orderDetails = result.map(element => {
+        const orderDetail = {
+          item_id: element.item_id,
+          order_id: id,
+          description: element.description,
+          quantity: element.quantity
+        }
+        return orderDetail;
+      });
+
+      console.log(order);
+      res.json(order);
+    })
+    .catch(error => {
+      console.log(error);
+      res.json(error);
+    })
 });
 
 router.get('/', function (req, res, next) {

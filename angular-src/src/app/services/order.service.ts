@@ -12,7 +12,7 @@ export class OrderService {
     console.log(">>order from services: ", order);
     return new Promise((resolve, reject) => {
       this.http
-        .post("/api/order", order, {
+        .post("/api/order/create", order, {
           headers: new HttpHeaders({ "Content-Type": "application/json" })
         })
         .toPromise()
@@ -22,6 +22,23 @@ export class OrderService {
         })
         .catch(error => {
           console.log(error);
+          reject(error);
+        });
+    });
+  }
+
+  getOrderById(id: number) {
+    console.log(id);
+    return new Promise((resolve, reject) => {
+      this.http
+        .get(`api/order/${id}`)
+        .toPromise()
+        .then(result => {
+          console.log('>>result', result);
+          resolve(result);
+        })
+        .catch(error => {
+          console.log('error>>', error);
           reject(error);
         });
     });

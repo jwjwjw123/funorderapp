@@ -9,6 +9,22 @@ const startTransaction = (connection) => {
   });
 };
 
+const mkQueryFromPool = (mkQueryInstance, pool) => {
+  return params => {
+    return new Promise((resolve, reject) => {
+      pool.getConnection((error, connection) => {
+        if (error) {
+          return reject(error);
+        }
+        mkQueryInstance({ connection, params: params || [] })
+          .then(status => resolve(status.result))
+          .catch(status => reject(status.error))
+          .finally(() => connection.release());
+      })
+    })
+  };
+}
+
 const mkQuery = (sql) => {
   return status => {
     const connection = status.connection;
@@ -31,7 +47,7 @@ const commit = (status) => {
     connection.commit(error => {
       if (error) {
         connection.rollback();
-        return reject({ connection, error: error });
+        return reject({ connection, error });
       }
       resolve({ connection });
     });
@@ -42,7 +58,7 @@ const rollback = (status) => {
   return new Promise((resolve, reject) => {
     const connection = status.connection;
     connection.rollback(error => {
-      console.log('rollback >>>>> ', error);
+      console.log('rollback >>>>> ', status.error);
       if (error) {
         return reject({ connection, error });
       }
@@ -51,4 +67,4 @@ const rollback = (status) => {
   })
 }
 
-module.exports = { startTransaction, mkQuery, commit, rollback };
+module.exports = { startTransaction, mkQuery, commit, rollback, mkQueryFromPool };
