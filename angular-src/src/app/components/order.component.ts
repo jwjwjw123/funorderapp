@@ -45,22 +45,22 @@ export class OrderComponent implements OnInit {
       });
   }
 
-  private addOrderDetails() {
+  addOrderDetails() {
     this.orderDetails.push(this.createOrderDetails());
   }
 
-  private removeOrderDetails(idx: number) {
+  removeOrderDetails(idx: number) {
     this.orderDetails.removeAt(idx);
   }
 
-  private createOrderDetails(): FormGroup {
+  createOrderDetails(): FormGroup {
     return this.fb.group({
       description: ["", Validators.required],
       quantity: ["1", Validators.required]
     });
   }
 
-  private createOrderForm(): FormGroup {
+  createOrderForm(): FormGroup {
     return this.fb.group({
       email: ["", Validators.required],
       orderDetails: this.fb.array([])
