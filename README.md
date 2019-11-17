@@ -1,1 +1,1 @@
-Deployed to <https://afternoon-springs-23846.herokuapp.com/>
+Deployed to <https://funorderapp.herokuapp.com/>
