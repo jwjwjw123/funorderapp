@@ -9,6 +9,7 @@ script:
   - build_angular.sh
 deploy:
   provider: heroku
+  skip_cleanup: true
   api_key: '$HEROKU_TOKEN'
   on: release
 notifications:
