@@ -3,6 +3,9 @@ node_js:
   - node
 dist: bionic
 sudo: required
+branches:
+  only:
+    - master
 before_script:
   - npm install -g @angular/cli
 script:
@@ -12,7 +15,10 @@ deploy:
   skip_cleanup: true
   api_key:
     secure: '$HEROKU_TOKEN'
-  on: release
+  app: funorderapp
+  on:
+    repo: jwjwjw123/funorderapp
+    branch: master
 notifications:
   email:
     - jingwen92@hotmail.com
