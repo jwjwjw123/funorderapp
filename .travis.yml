@@ -10,7 +10,8 @@ script:
 deploy:
   provider: heroku
   skip_cleanup: true
-  api_key: '$HEROKU_TOKEN'
+  api_key:
+    secure: '$HEROKU_TOKEN'
   on: release
 notifications:
   email:
