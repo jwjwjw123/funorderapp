@@ -7,6 +7,7 @@ branches:
   only:
     - master
 before_script:
+  - npm install
   - npm install -g @angular/cli
 script:
   - cd angular-src/; ng build --prod; cd ..
