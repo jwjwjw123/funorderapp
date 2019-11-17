@@ -9,7 +9,7 @@ branches:
 before_script:
   - npm install -g @angular/cli
 script:
-  - cd angular-src; ng build --prod; cd ..
+  - cd angular-src/; ng build --prod; cd ..
 deploy:
   provider: heroku
   api_key: '$HEROKU_TOKEN'
