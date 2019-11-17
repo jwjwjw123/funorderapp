@@ -1,13 +1,19 @@
 export interface Order{
-  order_id?: number,
+  order_id?: string,
   email: string,
   order_date: string,
   orderDetails: OrderDetail[]
 }
 
 export interface OrderDetail{
-  item_id?: number,
-  order_id?: number,
-  description: string,
+  order_detail_id?: string,
+  order_id?: string,
+  product: Product,
   quantity: number
+}
+
+export interface Product{
+  product_id?: string,
+  description: string,
+  image_url?: string
 }

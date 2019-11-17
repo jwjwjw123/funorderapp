@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ShopService } from 'src/app/services/shop.service';
+import { Order } from 'src/app/models';
 
 @Component({
   selector: 'app-edit-order',
@@ -6,10 +8,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./edit-order.component.css']
 })
 export class EditOrderComponent implements OnInit {
+  orders: Order[];
 
-  constructor() { }
+  constructor(private shopService: ShopService) { }
 
   ngOnInit() {
+    this.shopService.getOrders().then((result) => {
+      this.orders = result;
+    })
   }
 
 }

@@ -1,0 +1,11 @@
+<form [formGroup]="createProductForm" (ngSubmit)="processForm()" fxLayout="column row">
+  <div>
+    <mat-label>Description</mat-label>
+    <input type="text" formControlName="description">
+  </div>
+  <div>
+    <mat-label>Choose an image</mat-label>
+    <input type="file" accept="image/*" #imageFile>
+  </div>
+  <button type="submit">Submit</button>
+</form>

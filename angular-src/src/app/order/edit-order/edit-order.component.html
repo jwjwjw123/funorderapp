@@ -1,0 +1,15 @@
+<div>
+  <mat-card *ngFor="let order of orders">
+    <mat-card-header>
+      <mat-card-title>{{ order.email }}</mat-card-title>
+      <mat-card-subtitle>{{ order.order_date | date:'full' }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div *ngFor="let orderDetail of order.orderDetails">
+        <img src="{{ orderDetail.product.image_url }}" alt="">
+        <p>{{ orderDetail.product.description }}</p>
+        <p>{{ orderDetail.quantity }}</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

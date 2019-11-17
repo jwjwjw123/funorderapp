@@ -1,0 +1,6 @@
+<form *ngFor="let product of products; let i = index;" [formGroup]="product" (ngSubmit)="processForm(i)">
+  <img src="{{ product.value.image_url }}" alt="">
+  <mat-label>Description: </mat-label>
+  <input matInput formControlName="description">
+  <button type="submit">Update</button>
+</form>
