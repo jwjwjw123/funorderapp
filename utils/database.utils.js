@@ -3,7 +3,6 @@ module.exports = { startTransaction, mkQuery, commit, rollback, mkQueryFromPool 
 function startTransaction(connection) {
   return new Promise((resolve, reject) => {
     connection.beginTransaction(error => {
-      console.log(error);
       if (error) {
         return reject({ connection, error });
       }
@@ -16,7 +15,6 @@ function mkQueryFromPool(mkQueryInstance, pool) {
   return params => {
     return new Promise((resolve, reject) => {
       pool.getConnection((error, connection) => {
-        console.log(error);
         if (error) {
           return reject(error);
         }
@@ -35,7 +33,6 @@ function mkQuery(sql) {
     const params = status.params || [];
     return new Promise((resolve, reject) => {
       connection.query(sql, params, (error, result) => {
-        console.log(error);
         if (error) {
           return reject({ connection, error });
         }
@@ -50,7 +47,6 @@ function commit(status) {
     const connection = status.connection;
     console.info('in commit');
     connection.commit(error => {
-      console.log(error);
       if (error) {
         connection.rollback();
         return reject({ connection, error });

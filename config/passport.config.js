@@ -1,20 +1,25 @@
-const LocalStrategy = require('passport-local').Strategy;
-const authenticateUser = require('../services/user.service').authenticateUser;
+require('dotenv').config();
+const { Strategy, ExtractJwt } = require('passport-jwt');
 
-modules.exports = function (passport) {
-  passport.use(new LocalStrategy(
+const { getUserById } = require('../services/user.service');
+
+
+module.exports = (passport) => {
+  passport.use(new Strategy(
     {
-      usernameField: 'email',
-      passwordField: 'password'
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: process.env.JWT_SECRET,
+      issuer: 'funorderapp',
+
     },
-    (email, password, done) => {
-      authenticateUser([email, password])
-        .then(result => {
-          if (result) {
-            return done(null, result);
+    function (jwt_payload, done) {
+      getUserById(jwt_payload.sub)
+        .then(user => {
+          if (user) {
+            return done(null, user);
           }
-          done(null, false);
+          return done(null, false);
         })
     }
-  ));
+  ))
 }

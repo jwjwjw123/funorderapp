@@ -1,5 +1,5 @@
 import { Injectable, ElementRef } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Product, Order } from "../models";
 
 @Injectable({
@@ -14,9 +14,9 @@ export class ShopService {
     formData.set("image-file", imageRef.nativeElement.files[0]);
     return this.http.post("/api/product/create", formData).toPromise();
   }
-  
-  updateProduct(product: Product){
-    return this.http.post('/api/product/update', product).toPromise();
+
+  updateProduct(product: Product) {
+    return this.http.post("/api/product/update", product).toPromise();
   }
 
   getProducts(): Promise<Product[]> {
@@ -35,7 +35,6 @@ export class ShopService {
         );
     });
   }
-
 
   createOrder(order: Order) {
     console.log(">>order from services: ", order);
@@ -56,8 +55,8 @@ export class ShopService {
     });
   }
 
-  getOrders(): Promise<Order[]>{
-    return this.http.get<Order[]>('/api/order/all').toPromise();
+  getOrders(): Promise<Order[]> {
+    return this.http.get<Order[]>("/api/order/all").toPromise();
   }
 
   getOrderById(id: number) {
@@ -75,5 +74,20 @@ export class ShopService {
           reject(error);
         });
     });
+  }
+
+  signInUser(email: string, password: string) {
+    const params = new HttpParams()
+      .set("email", email)
+      .set("password", password);
+    const headers = new HttpHeaders().set(
+      "Content-Type",
+      "application/x-www-form-urlencoded"
+    );
+    return this.http
+      .post("/api/user/authenticate", params.toString(), {
+        headers
+      })
+      .toPromise();
   }
 }
