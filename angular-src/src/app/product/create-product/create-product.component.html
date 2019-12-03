@@ -5,6 +5,9 @@
   </div>
   <div>
     <mat-label>Choose an image</mat-label>
+    <div class="image-preview" *ngIf="image">
+
+    </div>
     <input type="file" accept="image/*" #imageFile>
   </div>
   <button type="submit">Submit</button>

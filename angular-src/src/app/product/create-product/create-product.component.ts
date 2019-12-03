@@ -10,6 +10,7 @@ import { Product } from "src/app/models";
 })
 export class CreateProductComponent implements OnInit {
   createProductForm: FormGroup;
+  imageURL: string;
 
   @ViewChild("imageFile", { static: false })
   imageFile: ElementRef;

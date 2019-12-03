@@ -3,7 +3,10 @@
     <button mat-icon-button (click)="snav.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
-    <h1 class="title" [routerLink]="['/']">The Fake Value Shop</h1>
+    <h1 class="title" [routerLink]="['/']">The Fruit Shop</h1>
+    <span class="spacer"></span>
+    <button mat-button [routerLink]="['/login']">Login</button>
+    <button class="register-btn" mat-button>Register</button>
   </mat-toolbar>
   <mat-sidenav-container class="sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
     <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches"
